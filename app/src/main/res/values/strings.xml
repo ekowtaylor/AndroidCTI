@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">CustomListView</string>
+    <string name="app_name">API Checker</string>
+    <string name="table_name">Table:</string>
+    <string name="column_name">Column:</string>
+    <string name="output_raw">Output (raw):</string>
+    <string name="output_clean">Output (clean):</string>
 </resources>

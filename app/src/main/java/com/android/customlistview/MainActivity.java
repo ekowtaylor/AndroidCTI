@@ -31,10 +31,13 @@ public class MainActivity extends AppCompatActivity {
 
     void BindData() {
         //Device manufacturer
-        models.add(new AndroidAPI().getDeviceManufacturer());
+        models.add(new AndroidAPI(getApplicationContext()).getDeviceManufacturer());
 
         //Device model
-        models.add(new AndroidAPI().getDeviceModel());
+        models.add(new AndroidAPI(getApplicationContext()).getDeviceModel());
+
+        //lte_rsrq
+        models.add(new AndroidAPI(getApplicationContext()).get_lte_rsrq());
 
 
         /*

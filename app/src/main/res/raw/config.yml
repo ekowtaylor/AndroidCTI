@@ -1,0 +1,19 @@
+table: "cell_tower_info"
+  column:
+    device_type:
+      api_1:
+        option_1:
+          type: "1:1"
+          sdk_prime_class: 'android.os.Build'
+          sdk_prime_class_link: ''
+          sdk_prime_method: 'Build.Model'
+          sdk_prime_method_link: ''
+    manufacturer:
+      type: "1:1"
+      sdk_class: ''
+    os:
+      type: "1:1"
+      sdk_class: ''
+    os_version:
+      type: "1:1"
+      sdk_class: ''
