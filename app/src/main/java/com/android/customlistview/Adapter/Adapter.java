@@ -51,6 +51,7 @@ public class Adapter extends BaseAdapter {
         TextView textView = convertView.findViewById(R.id.tv);
         TextView tableTextView = convertView.findViewById(R.id.table);
         TextView colTextView = convertView.findViewById(R.id.column);
+        TextView outputRawTextView = convertView.findViewById(R.id.outputRaw);
         LinearLayout linearLayout = convertView.findViewById(R.id.lin);
 
         final Model model = modelArrayList.get(position);
@@ -58,6 +59,7 @@ public class Adapter extends BaseAdapter {
         textView.setText(model.getName());
         tableTextView.setText(model.getTableName());
         colTextView.setText(model.getTableColumn());
+        outputRawTextView.setText(String.valueOf(model.getOutputRaw()));
 
         if (!model.getImage().equals("")) {
             Picasso.get().load(model.getImage()).into(imageView);

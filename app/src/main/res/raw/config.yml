@@ -2,18 +2,64 @@ table: "cell_tower_info"
   column:
     device_type:
       api_1:
-        option_1:
+        description: "The end-user-visible name for the end product."
+        dependency_1:
+          name: "Build"
+          description: "Information about the current build, extracted from system properties."
+          type: "1:1"
+          sdk_class: 'android.os.Build'
+          sdk_class_link: 'https://developer.android.com/reference/android/os/Build'
+          sdk_method: 'Build.Model'
+          sdk_method_link: 'https://developer.android.com/reference/android/os/Build#MODEL'
+    lte_rscp:
+      api_1:
+        description: "Get reference signal received power in dBm Range: -140 dBm to -43 dBm."
+        dependency_1:
+          name: "TelephonyManager"
+          description: "Provides access to information about the telephony services on the device"
+          type: "1:1:N"
+          sdk_class: 'android.telephony.TelephonyManager'
+          sdk_class_link: 'https://developer.android.com/reference/android/telephony/package-summary'
+          sdk_method: 'getSignalStrength().getCellSignalStrengths()'
+          sdk_method_link: 'https://developer.android.com/reference/android/telephony/SignalStrength.html#getCellSignalStrengths()'
+        dependency_2:
+          name: "SignalStrength"
+          description: "Contains phone signal strength related information."
+          type: "1:N"
+          sdk_class: 'android.telephony.SignalStrength'
+          sdk_class_link: 'https://developer.android.com/reference/android/telephony/SignalStrength'
+          sdk_method: 'getCellSignalStrengths()'
+          sdk_method_link: 'https://developer.android.com/reference/android/telephony/SignalStrength.html#getCellSignalStrengths()'
+        dependency_3:
+          name: "CellSignalStrength"
+          description: "Abstract base class for cell phone signal strength related information."
+          type: "1:1"
+          sdk_class: 'android.telephony.CellSignalStrength'
+          sdk_class_link: 'https://developer.android.com/reference/android/telephony/CellSignalStrength.html'
+          sdk_method: ''
+          sdk_method_link: ''
+        dependency_4:
+          name: "CellSignalStrengthLte"
+          description: "LTE signal strength related information."
+          type: "1:1"
+          sdk_class: 'android.telephony.CellSignalStrengthLte'
+          sdk_class_link: 'https://developer.android.com/reference/android/telephony/CellSignalStrengthLte.html'
+          sdk_method: 'getRsrp()'
+          sdk_method_link: 'https://developer.android.com/reference/android/telephony/CellSignalStrengthLte.html#getRsrp()'
+    os_version:
+      api_1:
+        description: "some wordy description"
+        dependency_1:
+          name: "device_type"
+          description: "some wordy description"
           type: "1:1"
           sdk_prime_class: 'android.os.Build'
           sdk_prime_class_link: ''
           sdk_prime_method: 'Build.Model'
           sdk_prime_method_link: ''
     manufacturer:
-      type: "1:1"
-      sdk_class: ''
-    os:
-      type: "1:1"
-      sdk_class: ''
-    os_version:
-      type: "1:1"
-      sdk_class: ''
+      api_1:
+        description: "some wordy description"
+        dependency_1:
+          type: "1:1"
+          sdk_class: ''

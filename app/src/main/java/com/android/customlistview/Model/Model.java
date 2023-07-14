@@ -2,7 +2,8 @@ package com.android.customlistview.Model;
 
 public class Model {
 
-    private String Image, Name, TableName, TableColumn;
+    private String Image, Name, TableName, TableColumn, OutputClean;
+    private Object OutputRaw;
 
     public String getImage() {
         return Image;
@@ -38,11 +39,20 @@ public class Model {
         TableColumn = tablecolumn;
     }
 
+    public Object getOutputRaw() {
+        return OutputRaw;
+    }
 
-    public Model(String image, String name, String tablename, String tablecolumn) {
+    public void setOutputRaw(Object outputraw) {
+        OutputRaw = outputraw;
+    }
+
+
+    public Model(String image, String name, String tablename, String tablecolumn, String outputraw) {
         Image = image;
         Name = name;
         TableName = tablename;
         TableColumn = tablecolumn;
+        OutputRaw = outputraw;
     }
 }

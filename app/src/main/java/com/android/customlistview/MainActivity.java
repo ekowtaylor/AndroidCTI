@@ -8,9 +8,13 @@ import com.android.customlistview.Adapter.Adapter;
 import com.android.customlistview.Model.AndroidAPI;
 import com.android.customlistview.Model.Model;
 
+import java.security.Permissions;
 import java.util.ArrayList;
 
 import androidx.appcompat.app.AppCompatActivity;
+import com.permissionx.guolindev.PermissionX;
+import android.Manifest;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,32 +29,72 @@ public class MainActivity extends AppCompatActivity {
 
         lv = findViewById(R.id.lv);
 
+        System.out.println("Bind data");
+
+        checkPermissions();
+
+
         BindData();
+
 
     }
 
+
+    void checkPermissions() {
+        PermissionX.init(this)
+                .permissions(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE)
+                .explainReasonBeforeRequest()
+                .onExplainRequestReason((scope, deniedList, beforeRequest) -> {
+                    scope.showRequestReasonDialog(deniedList, "API Checker needs following permissions to continue", "Allow");
+                })
+                .onForwardToSettings((scope, deniedList) -> {
+                    scope.showForwardToSettingsDialog(deniedList, "Please allow following permissions in settings", "Allow");
+                })
+                .request((allGranted, grantedList, deniedList) -> {
+                    if (allGranted) {
+                        Toast.makeText(MainActivity.this, "All permissions are granted", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(MainActivity.this, "The following permissions are denied：" + deniedList, Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
     void BindData() {
+        //instantiate the AAPI
+        AndroidAPI aapi = new AndroidAPI(getApplicationContext());
+
+        /* SETTERS */
+        //set cellinfo
+        aapi.setCellInfo();
+
+        //set cellsignalinfl
+        aapi.setCellSignalInfo();
+
+        /* GETTERS */
+        //OS
+        models.add(aapi.get_os());
+
+        //network type
+        models.add(aapi.get_network_type());
+
+        //phone type
+        models.add(aapi.get_phone_type());
+
         //Device manufacturer
-        models.add(new AndroidAPI(getApplicationContext()).getDeviceManufacturer());
+        models.add(aapi.getDeviceManufacturer());
 
         //Device model
-        models.add(new AndroidAPI(getApplicationContext()).getDeviceModel());
+        models.add(aapi.get_device_type());
+
+        //os_Version
+        models.add(aapi.getOsVersion());
+
+        //lte_rscp
+        models.add(aapi.get_lte_rscp());
 
         //lte_rsrq
-        models.add(new AndroidAPI(getApplicationContext()).get_lte_rsrq());
+        models.add(aapi.get_lte_rsrq());
 
-
-        /*
-        models.add(new Model("https://s.ftcdn.net/v2013/pics/all/curated/RKyaEDwp8J7JKeZWQPuOVWvkUjGQfpCx_cover_580.jpg?r=1a0fc22192d0c808b8bb2b9bcfbf4a45b1793687", "First", "cell_tower_info", "col1"));
-        models.add(new Model("https://www.gettyimages.com/gi-resources/images/500px/983794168.jpg", "Second", "cell_tower_info", "col1"));
-        models.add(new Model("https://killerattitudestatus.in/wp-content/uploads/2019/12/gud-night-images.jpg", "Third", "cell_tower_info", "col1"));
-        models.add(new Model("https://1.bp.blogspot.com/-MdaQwrpT4Gs/Xdt-ff_hxEI/AAAAAAAAQXE/oOgnysGd9LwoFLMHJ0etngKzXxmQkWc5ACLcBGAsYHQ/s400/Beautiful-Backgrounds%2B%2528122%2529.jpg", "Fourth", "cell_tower_info", "col1"));
-        models.add(new Model("https://cdn.pixabay.com/photo/2015/06/19/21/24/the-road-815297__340.jpg", "Fifth", "cell_tower_info", "col1"));
-        models.add(new Model("https://www.scld.org.uk/wp-content/uploads/2020/05/lukasz-szmigiel-jFCViYFYcus-unsplash.jpg", "Sixth", "cell_tower_info", "col1"));
-        models.add(new Model("https://www.w3schools.com/w3css/img_lights.jpg", "Seventh", "cell_tower_info", "col1"));
-        models.add(new Model("https://www.w3schools.com/howto/img_snow.jpg", "Eight", "cell_tower_info", "col1"));
-        models.add(new Model("https://studio-chateau-angers.com/wp-content/plugins/qards/templates/ui-kit-cover/img/mountains.jpg", "Nine", "cell_tower_info", "col1"));
-        */
         adapter = new Adapter(getApplicationContext(), models);
         lv.setAdapter(adapter);
     }

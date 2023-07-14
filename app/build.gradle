@@ -33,4 +33,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation group: 'org.yaml', name: 'snakeyaml', version: '2.0'
+    implementation 'com.guolindev.permissionx:permissionx:1.7.1'
 }
