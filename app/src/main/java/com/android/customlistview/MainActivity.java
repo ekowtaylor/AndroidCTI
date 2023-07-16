@@ -22,27 +22,28 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Model> models = new ArrayList<>();
     Adapter adapter;
 
+    //instantiate the AAPI
+    AndroidAPI aapi;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         lv = findViewById(R.id.lv);
 
-        System.out.println("Bind data");
+        aapi = new AndroidAPI(getApplicationContext());
 
         checkPermissions();
 
-
         BindData();
-
 
     }
 
 
     void checkPermissions() {
         PermissionX.init(this)
-                .permissions(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE)
+                .permissions(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE,
+                        Manifest.permission.ACCESS_WIFI_STATE)
                 .explainReasonBeforeRequest()
                 .onExplainRequestReason((scope, deniedList, beforeRequest) -> {
                     scope.showRequestReasonDialog(deniedList, "API Checker needs following permissions to continue", "Allow");
@@ -60,19 +61,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void BindData() {
-        //instantiate the AAPI
-        AndroidAPI aapi = new AndroidAPI(getApplicationContext());
+        System.out.println("Bind data");
 
         /* SETTERS */
-        //set cellinfo
-        aapi.setCellInfo();
-
-        //set cellsignalinfl
-        aapi.setCellSignalInfo();
+        setCommonParams();
 
         /* GETTERS */
+        /* DEVICE INFO */
+        //Device manufacturer
+        models.add(aapi.get_device_manufacturer());
+
+        //Device model
+        models.add(aapi.get_device_type());
+
         //OS
         models.add(aapi.get_os());
+
+        //os_Version
+        models.add(aapi.get_os_version());
+
+        //country
+
+        //carrier
 
         //network type
         models.add(aapi.get_network_type());
@@ -80,14 +90,20 @@ public class MainActivity extends AppCompatActivity {
         //phone type
         models.add(aapi.get_phone_type());
 
-        //Device manufacturer
-        models.add(aapi.getDeviceManufacturer());
+        //sim country iso
+        models.add(aapi.get_sim_country_iso());
 
-        //Device model
-        models.add(aapi.get_device_type());
+        //sim operator mcc mnc
+        models.add(aapi.get_sim_operator_mcc_mnc());
 
-        //os_Version
-        models.add(aapi.getOsVersion());
+        //sim operator name
+        models.add(aapi.get_sim_operator_name());
+
+        //has icc card
+        models.add(aapi.get_has_icc_card());
+
+
+
 
         //lte_rscp
         models.add(aapi.get_lte_rscp());
@@ -97,5 +113,22 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new Adapter(getApplicationContext(), models);
         lv.setAdapter(adapter);
+    }
+
+    void setCommonParams(){
+        // set sim info
+        aapi.setSimInfo();
+
+        //set device info
+        aapi.setDeviceInfo();
+
+        //set connection info
+        aapi.setConnectionInfo();
+
+        //set cellinfo
+        aapi.setCellInfo();
+
+        //set cellsignalinfo
+        aapi.setCellSignalInfo();
     }
 }
