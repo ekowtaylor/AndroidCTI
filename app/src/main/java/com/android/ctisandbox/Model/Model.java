@@ -1,4 +1,4 @@
-package com.android.customlistview.Model;
+package com.android.ctisandbox.Model;
 
 public class Model {
 

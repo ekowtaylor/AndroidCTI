@@ -1,4 +1,4 @@
-package com.android.customlistview.Adapter;
+package com.android.ctisandbox.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,8 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.customlistview.Model.Model;
-import com.android.customlistview.R;
+import com.android.ctisandbox.Model.Model;
+import com.android.ctisandbox.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

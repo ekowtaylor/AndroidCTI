@@ -1,4 +1,4 @@
-package com.android.customlistview;
+package com.android.ctisandbox;
 
 import org.junit.Test;
 

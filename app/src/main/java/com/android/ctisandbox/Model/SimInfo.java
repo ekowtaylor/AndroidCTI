@@ -1,8 +1,7 @@
-package com.android.customlistview.Model;
-
-import static android.content.Context.TELEPHONY_SERVICE;
+package com.android.ctisandbox.Model;
 
 import android.content.Context;
+import android.os.Build;
 import android.telephony.TelephonyManager;
 
 import java.util.HashMap;
@@ -26,7 +25,12 @@ public class SimInfo {
                 "sim_country_iso",
                 "sim_operator_mcc_mnc",
                 "sim_operator_name",
-                "has_icc_card"
+                "has_icc_card",
+                "sim_carrier_id",
+                "sim_carrier_id_name",
+                "carrier_id_from_sim_mcc_mnc",
+                "sim_specific_carrier_id",
+                "sim_specific_carrier_id_name"
         };
 
         // For loop for iterating over the List
@@ -41,6 +45,17 @@ public class SimInfo {
         simInfoMap.put("sim_operator_name", telMgr.getSimOperatorName());
 
         simInfoMap.put("has_icc_card", telMgr.hasIccCard());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            simInfoMap.put("sim_carrier_id", telMgr.getSimCarrierId());
+            simInfoMap.put("sim_carrier_id_name", telMgr.getSimCarrierIdName());
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            simInfoMap.put("sim_specific_carrier_id", telMgr.getCarrierIdFromSimMccMnc());
+            simInfoMap.put("sim_specific_carrier_id_name", telMgr.getSimSpecificCarrierIdName());
+        }
+
 
         return simInfoMap;
     }

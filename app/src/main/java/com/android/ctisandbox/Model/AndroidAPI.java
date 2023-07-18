@@ -1,14 +1,10 @@
-package com.android.customlistview.Model;
+package com.android.ctisandbox.Model;
 
 import static android.content.Context.TELEPHONY_SERVICE;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-
-import androidx.core.app.ActivityCompat;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,12 +16,13 @@ import java.util.Map;
 public class AndroidAPI {
     private static final String TAG = "Android API";
     private final Context mContext;
-    Map<String, Object> deviceInfoMap = new HashMap<String, Object>();
-    Map<String, Object> cellInfoMap = new HashMap<String, Object>();
-    Map<String, Object> cellSignalInfoMap = new HashMap<String, Object>();
-    Map<String, Object> simInfoMap = new HashMap<String, Object>();
+    Map deviceInfoMap = new HashMap<String, Object>();
+    Map deviceLocationInfoMap = new HashMap<String, Object>();
+    Map cellInfoMap = new HashMap<String, Object>();
+    Map cellSignalInfoMap = new HashMap<String, Object>();
+    Map simInfoMap = new HashMap<String, Object>();
     Map<String, Object> operatorInfoMap = new HashMap<String, Object>();
-    Map<String, Object> connectionInfoMap = new HashMap<String, Object>();
+    Map connectionInfoMap = new HashMap<String, Object>();
     private final TelephonyManager tm;
 
 
@@ -66,6 +63,11 @@ public class AndroidAPI {
     public void setDeviceInfo() {
         DeviceInfo di = new DeviceInfo(mContext,tm);
         deviceInfoMap = di.setDeviceInfo();
+    }
+
+    public void setDeviceLocationInfo() {
+        DeviceLocationInfo dli = new DeviceLocationInfo(mContext,tm);
+        deviceLocationInfoMap = dli.setDeviceLocationInfo();
     }
 
     public void setCellInfo() {
@@ -119,22 +121,7 @@ public class AndroidAPI {
 
     //phone type
     public Model get_phone_type() {
-        int phoneType = tm.getPhoneType();
-        String phone_type = "unknown";
-        switch (phoneType)
-        {
-            case (TelephonyManager.PHONE_TYPE_CDMA):
-                phone_type = "CDMA";
-                break;
-            case (TelephonyManager.PHONE_TYPE_GSM):
-                phone_type = "GSM";
-                break;
-            case (TelephonyManager.PHONE_TYPE_NONE):
-                phone_type = "NONE";
-                break;
-        }
-
-        return new Model("", "", "cell_tower_info", "phone_type", phone_type);
+        return new Model("", "", "cell_tower_info", "phone_type", String.valueOf(deviceInfoMap.get("phone_type")));
     }
 
     //sim country iso

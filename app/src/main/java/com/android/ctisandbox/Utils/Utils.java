@@ -1,4 +1,4 @@
-package com.android.customlistview.Utils;
+package com.android.ctisandbox.Utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

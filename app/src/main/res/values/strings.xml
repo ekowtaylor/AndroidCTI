@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">API Checker</string>
+    <string name="app_name">CTI Sandbox</string>
     <string name="table_name">Table:</string>
     <string name="column_name">Column:</string>
     <string name="output_raw">Output (raw):</string>

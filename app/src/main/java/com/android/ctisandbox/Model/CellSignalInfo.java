@@ -1,21 +1,9 @@
-package com.android.customlistview.Model;
+package com.android.ctisandbox.Model;
 
 import static android.content.Context.TELEPHONY_SERVICE;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Build;
-import android.telephony.CellIdentityCdma;
-import android.telephony.CellIdentityGsm;
-import android.telephony.CellIdentityLte;
-import android.telephony.CellIdentityNr;
-import android.telephony.CellIdentityWcdma;
-import android.telephony.CellInfoCdma;
-import android.telephony.CellInfoGsm;
-import android.telephony.CellInfoLte;
-import android.telephony.CellInfoNr;
-import android.telephony.CellInfoWcdma;
 import android.telephony.CellSignalStrength;
 import android.telephony.CellSignalStrengthCdma;
 import android.telephony.CellSignalStrengthGsm;
@@ -23,9 +11,6 @@ import android.telephony.CellSignalStrengthLte;
 import android.telephony.CellSignalStrengthNr;
 import android.telephony.CellSignalStrengthWcdma;
 import android.telephony.TelephonyManager;
-import android.util.Log;
-
-import androidx.core.app.ActivityCompat;
 
 import java.util.HashMap;
 import java.util.List;

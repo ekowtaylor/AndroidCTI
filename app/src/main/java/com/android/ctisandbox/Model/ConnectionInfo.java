@@ -1,6 +1,6 @@
-package com.android.customlistview.Model;
+package com.android.ctisandbox.Model;
 
-import static android.net.ConnectivityManager.TYPE_BLUETOOTH;
+import static android.content.Context.TELEPHONY_SERVICE;
 
 import android.Manifest;
 import android.content.Context;
@@ -9,25 +9,15 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
-import android.telephony.CellIdentityCdma;
-import android.telephony.CellIdentityGsm;
-import android.telephony.CellIdentityLte;
-import android.telephony.CellIdentityNr;
-import android.telephony.CellIdentityWcdma;
-import android.telephony.CellInfoCdma;
-import android.telephony.CellInfoGsm;
-import android.telephony.CellInfoLte;
-import android.telephony.CellInfoNr;
-import android.telephony.CellInfoWcdma;
 import android.telephony.CellSignalStrength;
+import android.telephony.CellSignalStrengthNr;
 import android.telephony.TelephonyManager;
 import android.text.format.Formatter;
-import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 
-import com.android.customlistview.Utils.Connectivity;
-import com.android.customlistview.Utils.Utils;
+import com.android.ctisandbox.Utils.Connectivity;
+import com.android.ctisandbox.Utils.Utils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -63,7 +53,17 @@ public class ConnectionInfo {
                     "override_network_type",
                     "is_nr_nsa_signal_strength",
                     "tower_changed",
-                    "registered_plmn"
+                    "registered_plmn",
+                    "network_country_iso",
+                    "network_operator_mcc_mnc",
+                    "network_operator_name",
+                    "is_network_roaming",
+                    "network_type_info",
+                    "network_generation",
+                    "network_params",
+                    "network_provider_detector_results",
+                    "override_network_type",
+                    "network_provider_input_features"
             };
 
             // For loop for iterating over the List
@@ -89,7 +89,7 @@ public class ConnectionInfo {
             String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
 
             // Method 3 - from ConnectivityManager
-            Utils.getDefaultIp(mContext);
+            //Utils.getDefaultIp(mContext);
 
             connectionInfoMap.put("client_public_address", ipv4);
 
@@ -101,8 +101,7 @@ public class ConnectionInfo {
             if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 return null;
-            }
-            else {
+            } else {
                 int nt = telMgr.getNetworkType();
                 //int nt = telMgr.getDataNetworkType();
 
@@ -157,13 +156,16 @@ public class ConnectionInfo {
                 }
 
                 connectionInfoMap.put("network_type", mobile_network_type);
+
+                //network_type_info
+                connectionInfoMap.put("network_type_info", mobile_network_type);
             }
 
             // Method 1 - ConnectionManager
             NetworkInfo info = Connectivity.getNetworkInfo(mContext);
             String connection_type = "";
             int type = info.getType();
-            switch (type ) {
+            switch (type) {
                 case ConnectivityManager.TYPE_BLUETOOTH:
                     connection_type = "bluetooth";
                     break;
@@ -172,8 +174,8 @@ public class ConnectionInfo {
                     break;
                 case ConnectivityManager.TYPE_WIFI:
                     connection_type = "wifi";
-                //Todo
-                //Add other use cases
+                    //Todo
+                    //Add other use cases
             }
 
             // Method 2 - NetworkCapabilities
@@ -182,7 +184,7 @@ public class ConnectionInfo {
             // Method 1 - ConnectionManager
             String connection_subtype = "";
             int subtype = info.getSubtype();
-            switch (type ) {
+            switch (type) {
                 case ConnectivityManager.TYPE_BLUETOOTH:
                     connection_type = "bluetooth";
                     break;
@@ -199,7 +201,7 @@ public class ConnectionInfo {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 int subtype2 = telMgr.getDataNetworkType();
                 String connection_subtype2 = "";
-                switch (type ) {
+                switch (type) {
                     case TelephonyManager.NETWORK_TYPE_HSPAP: // API level 13
                         connection_subtype2 = "HSPA";
                     case TelephonyManager.NETWORK_TYPE_IDEN: // API level 8
@@ -211,6 +213,50 @@ public class ConnectionInfo {
             connectionInfoMap.put("connection_subtype", connection_subtype);
 
 
+            //override_network_type
+            /*if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+                TelephonyDisplayInfo tdi = new TelephonyDisplayInfo();
+            }
+            tdi..getOverrideNetworkType()
+
+            if (android.os.Build.VERSION.SDK_INT >= 31 && telMgr.getDataNetworkType() == TelephonyManager.NETWORK_TYPE_LTE) {
+                // Delay update of the network type to check whether this is actually 5G-NSA.
+                Api31.disambiguate4gAnd5gNsa(context, /* instance= */ //NetworkTypeObserver.this);
+            /*} else {
+                updateNetworkType(networkType);
+            }*/
+            //connectionInfoMap.put("override_network_type", connection_subtype);
+
+            TelephonyManager tm;
+            List<CellSignalStrength> cellSignalInfo;
+
+            tm = (TelephonyManager) mContext.getSystemService(TELEPHONY_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                cellSignalInfo = tm.getSignalStrength().getCellSignalStrengths();
+
+                for (CellSignalStrength cellInfo : cellSignalInfo) {
+                    if (cellInfo instanceof CellSignalStrengthNr) {
+                        connectionInfoMap.put("is_nr_nsa_signal_strength", "true");
+                    } else {
+                        connectionInfoMap.put("is_nr_nsa_signal_strength", "false");
+                    }
+                }
+            }
+
+            //network_country_iso
+            connectionInfoMap.put("network_country_iso", telMgr.getNetworkCountryIso());
+
+            //network_operator_mcc_mnc
+            connectionInfoMap.put("network_operator_mcc_mnc", telMgr.getNetworkOperator());
+
+            //network_operator_name
+            connectionInfoMap.put("network_operator_name", telMgr.getNetworkOperatorName());
+
+            //is_network_roaming
+            connectionInfoMap.put("is_network_roaming", telMgr.isNetworkRoaming());
+
+            //network_generation
+            connectionInfoMap.put("network_generation", getNetworkGeneration());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -220,5 +266,37 @@ public class ConnectionInfo {
         return connectionInfoMap;
     }
 
+
+    public String getNetworkGeneration() {
+        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+        }
+        int networkType = telMgr.getNetworkType();
+        switch (networkType) {
+            case TelephonyManager.NETWORK_TYPE_GPRS:
+            case TelephonyManager.NETWORK_TYPE_EDGE:
+            case TelephonyManager.NETWORK_TYPE_CDMA:
+            case TelephonyManager.NETWORK_TYPE_1xRTT:
+            case TelephonyManager.NETWORK_TYPE_IDEN:
+                return "2G";
+            case TelephonyManager.NETWORK_TYPE_UMTS:
+            case TelephonyManager.NETWORK_TYPE_EVDO_0:
+            case TelephonyManager.NETWORK_TYPE_EVDO_A:
+            case TelephonyManager.NETWORK_TYPE_HSDPA:
+            case TelephonyManager.NETWORK_TYPE_HSUPA:
+            case TelephonyManager.NETWORK_TYPE_HSPA:
+            case TelephonyManager.NETWORK_TYPE_EVDO_B:
+            case TelephonyManager.NETWORK_TYPE_EHRPD:
+            case TelephonyManager.NETWORK_TYPE_HSPAP:
+                return "3G";
+            case TelephonyManager.NETWORK_TYPE_LTE:
+                return "4G";
+            case TelephonyManager.NETWORK_TYPE_NR:
+                return "5G";
+            default:
+                return "Unknown";
+        }
+    }
 
 }

@@ -1,4 +1,4 @@
-package com.android.customlistview.Model;
+package com.android.ctisandbox.Model;
 
 import android.Manifest;
 import android.content.Context;

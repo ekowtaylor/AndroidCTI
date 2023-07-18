@@ -1,4 +1,4 @@
-package com.android.customlistview;
+package com.android.ctisandbox;
 
 import android.content.Context;
 
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("com.android.customlistview", appContext.getPackageName());
+        assertEquals("com.android.com.android.ctisandbox", appContext.getPackageName());
     }
 }
