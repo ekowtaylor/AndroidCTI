@@ -122,6 +122,8 @@ public class MainActivity extends AppCompatActivity {
         //lte_rsrq
         models.add(aapi.get_lte_rsrq());
 
+
+        // Set adaptor
         adapter = new Adapter(getApplicationContext(), models);
         lv.setAdapter(adapter);
     }

@@ -51,7 +51,8 @@ public class DeviceInfo {
                 "manufacturer_code",
                 "phone_type",
                 "device_tac",
-                "service_state"
+                "service_state",
+                "country"
 
         };
 
@@ -185,6 +186,14 @@ public class DeviceInfo {
         System.out.println("Service State:" + serviceState);
         deviceInfoMap.put("service_state", serviceState);
 
+        // country
+        // Method 1
+        String country = telMgr.getSimCountryIso();
+
+        // Method 2
+        //String country = telMgr.getNetworkCountryIso()
+
+        deviceInfoMap.put("country", country);
 
         return deviceInfoMap;
     }

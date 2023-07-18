@@ -6,6 +6,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -26,6 +28,7 @@ import java.util.Map;
 public class ConnectionInfo {
     private final Context mContext;
     private final TelephonyManager telMgr;
+    private final ConnectivityManager conMgr;
     Map<String, Object> connectionInfoMap = new HashMap<String, Object>();
     String TAG = "CellInfo";
 
@@ -33,7 +36,7 @@ public class ConnectionInfo {
     public ConnectionInfo(Context ctx, TelephonyManager tm) {
         mContext = ctx;
         telMgr = tm;
-
+        conMgr =  (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
     public Map setConnectionInfo() {
@@ -64,7 +67,8 @@ public class ConnectionInfo {
                     "network_provider_detector_results",
                     "override_network_type",
                     "network_provider_input_features",
-                    "is_data_roaming_enabled"
+                    "is_data_roaming_enabled",
+                    "unmetered"
             };
 
             // For loop for iterating over the List
@@ -262,6 +266,15 @@ public class ConnectionInfo {
             //is_data_roaming_enabled
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 connectionInfoMap.put("is_data_roaming_enabled", telMgr.isDataRoamingEnabled());
+            }
+
+            //unmetered
+            final Network network;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                network = conMgr.getActiveNetwork();
+                NetworkCapabilities capabilities = conMgr
+                        .getNetworkCapabilities(network);
+                connectionInfoMap.put("unmetered", capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED));
             }
 
         } catch (Exception e) {
