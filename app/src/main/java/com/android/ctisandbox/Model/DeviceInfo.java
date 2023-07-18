@@ -13,12 +13,14 @@ import android.telephony.CellInfoCdma;
 import android.telephony.CellInfoGsm;
 import android.telephony.CellInfoLte;
 import android.telephony.CellInfoWcdma;
+import android.telephony.ServiceState;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 
 import androidx.core.app.ActivityCompat;
 
+import java.io.Serial;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +50,8 @@ public class DeviceInfo {
                 "is_multi_sim_supported",
                 "manufacturer_code",
                 "phone_type",
-                "device_tac"
+                "device_tac",
+                "service_state"
 
         };
 
@@ -145,7 +148,13 @@ public class DeviceInfo {
 
         // manufacturer_code
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            deviceInfoMap.put("manufacturer_code", telMgr.getMeid());
+            try {
+                deviceInfoMap.put("manufacturer_code", telMgr.getMeid());
+            }
+            catch (Exception e) {
+                // Todo
+                // log some error to serial
+            }
         }
 
 
@@ -170,6 +179,12 @@ public class DeviceInfo {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             deviceInfoMap.put("device_tac", telMgr.getTypeAllocationCode());
         }
+
+        // service_state
+        ServiceState serviceState = new ServiceState();
+        System.out.println("Service State:" + serviceState);
+        deviceInfoMap.put("service_state", serviceState);
+
 
         return deviceInfoMap;
     }

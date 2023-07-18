@@ -15,6 +15,7 @@ import android.telephony.CellInfoLte;
 import android.telephony.CellInfoNr;
 import android.telephony.CellInfoWcdma;
 import android.telephony.CellSignalStrength;
+import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -195,6 +196,7 @@ public class CellInfo {
 
 
                         // operator_alpha_long or operator_alpha_short
+                        //Method 1
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                             CharSequence alphalong = cellInfo.getCellIdentity().getOperatorAlphaLong();
                             if (alphalong != null) {
@@ -209,6 +211,11 @@ public class CellInfo {
                     }
                 }
             }
+
+            // Method 2
+            ServiceState serviceState = new ServiceState();
+            cellInfoMap.put("operator_alpha_long", serviceState.getOperatorAlphaLong());
+            cellInfoMap.put("operator_alpha_short", serviceState.getOperatorAlphaShort());
 
         } catch (Exception e) {
             e.printStackTrace();

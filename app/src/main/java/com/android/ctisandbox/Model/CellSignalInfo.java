@@ -10,6 +10,7 @@ import android.telephony.CellSignalStrengthGsm;
 import android.telephony.CellSignalStrengthLte;
 import android.telephony.CellSignalStrengthNr;
 import android.telephony.CellSignalStrengthWcdma;
+import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 
 import java.util.HashMap;
@@ -41,7 +42,11 @@ public class CellSignalInfo {
                     "nr_csi_sinr",
                     "nr_ss_rsrp",
                     "nr_ss_rsrq",
-                    "nr_ss_sinr"
+                    "nr_ss_sinr",
+                    "signal_level",
+                    "signal_asu_level",
+                    "signal_dbm",
+                    "is_nr_nsa_signal_strength"
             };
 
             // For loop for iterating over the List
@@ -58,6 +63,10 @@ public class CellSignalInfo {
                 cellSignalInfo = tm.getSignalStrength().getCellSignalStrengths();
 
                 for (CellSignalStrength cellInfo : cellSignalInfo) {
+                    cellSignalInfoMap.put("signal_level", cellInfo.getLevel());
+                    cellSignalInfoMap.put("signal_asu_level", cellInfo.getAsuLevel());
+                    cellSignalInfoMap.put("signal_dbm", cellInfo.getDbm());
+
                     if (cellInfo instanceof CellSignalStrengthLte) {
                         System.out.println("CellSignalStrengthLte");
                         cellSignalInfoMap.put("lte_rsrp", ((CellSignalStrengthLte) cellInfo).getRsrp());
@@ -78,6 +87,8 @@ public class CellSignalInfo {
                         cellSignalInfoMap.put("nr_ss_rsrp", ((CellSignalStrengthNr) cellInfo).getSsRsrp());
                         cellSignalInfoMap.put("nr_ss_rsrq", ((CellSignalStrengthNr) cellInfo).getSsRsrq());
                         cellSignalInfoMap.put("nr_ss_sinr", ((CellSignalStrengthNr) cellInfo).getSsSinr());
+
+                        cellSignalInfoMap.put("is_nr_nsa_signal_strength", true);
                     } else {
                         System.out.println("Other");
                     }
@@ -85,6 +96,9 @@ public class CellSignalInfo {
 
                 }
             }
+
+
+
 
         } catch (Exception e) {
             e.printStackTrace();
