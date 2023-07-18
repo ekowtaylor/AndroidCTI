@@ -71,7 +71,9 @@ public class CellInfo {
                     "cdma_base_station_latitude",
                     "cdma_base_station_longitude",
                     "cdma_network_id",
-                    "cdma_system_id"
+                    "cdma_system_id",
+                    "operator_alpha_long",
+                    "operator_alpha_short"
             };
 
             // For loop for iterating over the List
@@ -189,6 +191,20 @@ public class CellInfo {
                         } else {
                             //电信2/3G
                             Log.e(TAG, "CDMA CellInfo................................................");
+                        }
+
+
+                        // operator_alpha_long or operator_alpha_short
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                            CharSequence alphalong = cellInfo.getCellIdentity().getOperatorAlphaLong();
+                            if (alphalong != null) {
+                                cellInfoMap.put("operator_alpha_long", alphalong);
+                            }
+
+                            CharSequence alphashort = cellInfo.getCellIdentity().getOperatorAlphaShort();
+                            if (alphashort != null) {
+                                cellInfoMap.put("operator_alpha_short", alphashort);
+                            }
                         }
                     }
                 }

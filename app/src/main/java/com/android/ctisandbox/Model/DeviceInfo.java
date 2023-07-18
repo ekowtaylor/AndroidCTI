@@ -47,7 +47,8 @@ public class DeviceInfo {
                 "hardware_address",
                 "is_multi_sim_supported",
                 "manufacturer_code",
-                "phone_type"
+                "phone_type",
+                "device_tac"
 
         };
 
@@ -67,6 +68,7 @@ public class DeviceInfo {
         deviceInfoMap.put("hardware_address", Build.MANUFACTURER);
 
 
+        // is_multi_sim_supported
         // Method 1
         //For API >=17:
         TelephonyManager manager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
@@ -141,19 +143,13 @@ public class DeviceInfo {
 
         deviceInfoMap.put("is_multi_sim_supported", d_sim);
 
-
+        // manufacturer_code
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            try {
-                deviceInfoMap.put("manufacturer_code", telMgr.getMeid());
-            }
-            catch (Exception e) {
-
-            }
-
+            deviceInfoMap.put("manufacturer_code", telMgr.getMeid());
         }
 
 
-
+        // phone_type
         int phoneType = telMgr.getPhoneType();
         String phone_type = "unknown";
         switch (phoneType)
@@ -169,6 +165,11 @@ public class DeviceInfo {
                 break;
         }
         deviceInfoMap.put("phone_type", phone_type);
+
+        // device_tac
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            deviceInfoMap.put("device_tac", telMgr.getTypeAllocationCode());
+        }
 
         return deviceInfoMap;
     }

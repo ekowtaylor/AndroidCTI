@@ -63,7 +63,8 @@ public class ConnectionInfo {
                     "network_params",
                     "network_provider_detector_results",
                     "override_network_type",
-                    "network_provider_input_features"
+                    "network_provider_input_features",
+                    "is_data_roaming_enabled"
             };
 
             // For loop for iterating over the List
@@ -198,7 +199,7 @@ public class ConnectionInfo {
             }
 
             // Method 2 - TelephonyManager
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 int subtype2 = telMgr.getDataNetworkType();
                 String connection_subtype2 = "";
                 switch (type) {
@@ -257,6 +258,11 @@ public class ConnectionInfo {
 
             //network_generation
             connectionInfoMap.put("network_generation", getNetworkGeneration());
+
+            //is_data_roaming_enabled
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                connectionInfoMap.put("is_data_roaming_enabled", telMgr.isDataRoamingEnabled());
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
